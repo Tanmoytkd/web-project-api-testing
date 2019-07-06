@@ -1,0 +1,33 @@
+{
+  "name": "userInfo",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "fullName": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "string",
+      "required": true
+    },
+    "bankAccountNumber": {
+      "type": "string"
+    },
+    "bankAccountSecret": {
+      "type": "string"
+    },
+    "accountType": {
+      "type": "string",
+      "required": true,
+      "default": "buyer"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

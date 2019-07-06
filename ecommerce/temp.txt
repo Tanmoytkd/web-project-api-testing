@@ -1,0 +1,5 @@
+This information is only for TKD'S server, your server will have different configuration
+
+Bank Account Number: k3duo6ymto
+<br>Bank Balance: 7337.67322298607
+<br>Bank Account Secret: axeYMUSd1EsHdhnOAEiFGMZgsc1d33UiQVEYLpU0A1nfcwijNTKdqhkqG3HyAlfA

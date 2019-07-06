@@ -1,0 +1,44 @@
+{
+  "name": "purchaseRequest",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "buyerAccountNumber": {
+      "type": "string",
+      "required": true
+    },
+    "ecommerceEmail": {
+      "type": "string",
+      "required": true
+    },
+    "ecommerceBankAccountNumber": {
+      "type": "string",
+      "required": true
+    },
+    "supplierEmail": {
+      "type": "string",
+      "required": true
+    },
+    "transaction1ID": {
+      "type": "string"
+    },
+    "transaction2ID": {
+      "type": "string"
+    },
+    "product_info": {
+      "type": "object"
+    },
+    "status": {
+      "type": "string",
+      "required": true,
+      "default": "pending"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

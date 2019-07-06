@@ -1,0 +1,38 @@
+{
+  "name": "product",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "priceEach": {
+      "type": "number",
+      "required": true
+    },
+    "supplier": {
+      "type": "string",
+      "required": true
+    },
+    "productImageURL": {
+      "type": "string",
+      "required": true,
+      "default": "https://images.yourstory.com/cs/wordpress/2016/08/125-fall-in-love.png"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "DENY"
+    }
+  ],
+  "methods": {}
+}
