@@ -2,23 +2,71 @@
 
 const axios = require('axios');
 var cookieParser = require('cookie-parser');
+var fs = require('fs'), path = require('path');
 
 module.exports = function(app) {
   app.use(cookieParser('123456'));
 
+  app.set('view engine', 'ejs');
+
+  app.get('/', function(req, res) {
+    var accessToken = req.signedCookies.bank_access_token;
+    var email = req.signedCookies.email;
+    var bankAccountNumber = req.signedCookies.bankAccountNumber;
+
+    var filePath = '', data = {};
+    if (!accessToken) {
+      filePath = path.join(__dirname, '/../../client/login');
+      res.render(filePath);
+    } else {
+      ////////////
+      app.models.userInfo.findOne({
+        where: {
+          email: email,
+        },
+      }, function(err, userInfo) {
+        if (err) {
+          var errorMsg = 'error occured when trying to find userInfo in Bank';
+          console.log(errorMsg, err);
+        }
+
+        var bankBalance = userInfo.bankBalance;
+        var bankAccountNumber = userInfo.bankAccountNumber;
+
+        var cookieOptions = {signed: true, maxAge: 3000000};
+
+        res.cookie('email', email, cookieOptions);
+        res.cookie('bank_access_token', accessToken, cookieOptions);
+        res.cookie('bankAccountNumber', bankAccountNumber, cookieOptions);
+
+        res.write('Bank Account Number: ' + bankAccountNumber);
+        res.write('\n<br>Bank Balance: ' + bankBalance);
+        res.end('\n<br>Bank Account Secret: ' + accessToken);
+      });
+
+      ////////////
+    }
+  });
+
   app.get('/getAccount', function(req, res) {
     var email = req.signedCookies.email;
+    if (req.query.email) email = req.query.email;
+    console.log(email);
+    console.log(req.query);
+    // console.log(req);
     app.models.userInfo.findOne({
       where: {
         email: email,
       },
     }, function(err, userInfo) {
-      res.send(JSON.stringify(userInfo));
+      console.log(userInfo);
+      res.send(userInfo);
     });
   });
 
   app.post('/transferBalance', function(req, res) {
-    var fromAccountNumber = req.body.bankAccountNumber;
+    var fromAccountNumber = req.body.fromAccountNumber;
+    console.log("from account received: ", fromAccountNumber);
     var toEmail = req.body.toEmail;
     var amount = req.body.amount;
 
@@ -47,7 +95,7 @@ module.exports = function(app) {
             amount: amount,
           };
 
-          console.log(postData);
+          // console.log(postData);
 
           axios.post('http://localhost:4000/api/transactions', postData).then(function(result) {
             res.send(result.data);
@@ -90,7 +138,7 @@ module.exports = function(app) {
         var cookieOptions = {signed: true, maxAge: 3000000};
 
         res.cookie('email', email, cookieOptions);
-        res.cookie('access_token', accessToken, cookieOptions);
+        res.cookie('bank_access_token', accessToken, cookieOptions);
         res.cookie('bankAccountNumber', bankAccountNumber, cookieOptions);
 
         res.write('Bank Account Number: ' + bankAccountNumber);
@@ -118,7 +166,8 @@ module.exports = function(app) {
         bankBalance: bankBalance,
       })
       .then(function(userInfoResponse) {
-        res.send('user account created');
+        res.redirect(302, '/');
+        // res.send('user account created');
       });
 
       console.log(response.data);
